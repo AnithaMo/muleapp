@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c5ed8437-4a73-4ca9-a7ca-4e41977579fe" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="datawave-demoFlow" doc:id="6ec3d378-df31-497a-b2be-243170f8d0c5" >
+		<http:listener doc:name="Listener" doc:id="c7660a32-7134-4356-afef-6b501261d87a" config-ref="HTTP_Listener_config" path="/hello world"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0c786e0c-db55-4587-b4a8-7c0ed3438b01" message="-----hello world---"/>
+	</flow>
+	<flow name="datawave-demoFlow1" doc:id="4fab9911-5b3c-4d58-8183-f16869af0628" >
+		<ee:transform doc:name="Transform Message" doc:id="32a4b87a-d6ce-402a-9cc5-e0ae0c80a5cf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+input payload application/json
+output appilaction/csv header = false
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="53137a23-6af3-4f77-a5dd-b3cb1e1bc5ba" message="#[payload]"/>
+	</flow>
+</mule>
